@@ -98,6 +98,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     func endTimer() {
         countdownTimer.invalidate()
+        timerLabel.text = "Great Job!"
     }
     
     func timeFormatted(_ totalSeconds: Int) -> String {
