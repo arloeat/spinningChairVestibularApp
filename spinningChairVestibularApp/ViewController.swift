@@ -12,6 +12,7 @@ import CoreLocation
 class ViewController: UIViewController, CLLocationManagerDelegate {
     
     
+    @IBOutlet weak var timerLabel: UILabel!
     @IBOutlet weak var userPrompt: UILabel!
     @IBOutlet weak var mascotView: UIImageView!
     
@@ -20,6 +21,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     var lastEventTime : NSDate?
     var lastCoordinate = 0.0
     var spinCount = 0.0
+    var countdownTimer: Timer!
+    var totalTime = 15
     
     //    var headingArray:[Date:Double]?
     
@@ -28,6 +31,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         // Do any additional setup after loading the view.
         locationManager.delegate = self
         locationManager.startUpdatingHeading()
+        startTimer()
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
@@ -78,7 +82,30 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
     }
     
+    func startTimer() {
+        countdownTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTime), userInfo: nil, repeats: true)
+    }
     
+    @objc func updateTime() {
+        timerLabel.text = "\(timeFormatted(totalTime))"
+        
+        if totalTime != 0 {
+            totalTime -= 1
+        } else {
+            endTimer()
+        }
+    }
+    
+    func endTimer() {
+        countdownTimer.invalidate()
+    }
+    
+    func timeFormatted(_ totalSeconds: Int) -> String {
+        let seconds: Int = totalSeconds % 60
+        //     let minutes: Int = (totalSeconds / 60) % 60
+        //     let hours: Int = totalSeconds / 3600
+        return String(format: "%02d", seconds)
+    }
     
 }
 
